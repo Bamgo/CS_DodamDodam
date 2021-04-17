@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 if (et.getText().toString() != null || !et.getText().toString().equals("")) {
                     ConnectThread th =new ConnectThread();
                     th.start();
+
                 }
             }
         });
