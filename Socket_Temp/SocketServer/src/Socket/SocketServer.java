@@ -9,27 +9,26 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-import static Socket.SerialReader.a;
+import static Socket.SerialReader.*;
 
 import java.io.*;
  
  
-public class SocketServer implements Runnable {
+public class SocketServer implements Runnable {  // 메인 코드 (소켓 서버 열고 데이터 전송)
     public static final int ServerPort = 3000;
     Scanner sc = new Scanner(System.in);
+    
 
     @Override
     public void run() {
-        try {
+        try {  
             ServerSocket serverSocket = new ServerSocket(ServerPort);//소켓생성
             System.out.println("Connecting...");
             while (true) {
                 //client 접속 대기
                 Socket client = serverSocket.accept(); //데이터 전송 감지
-                System.out.println("Receiving...");
+                //System.out.println("Receiving...");
                 try {
-                	
-                	
                     //데이터 전송
                     PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())),true);
                     String msg = a;
@@ -38,13 +37,14 @@ public class SocketServer implements Runnable {
                     //데이터 수신
                     BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
                     String read = input.readLine(); 
+                    Thread.sleep(2000);
                     System.out.println(read);
                 } catch (Exception e) {//데이터 전송과정에서의 에러출력
                     System.out.println("Error");
                     e.printStackTrace();
                 } finally {//소켓 연결 종료
                     client.close();
-                    System.out.println("Done.");
+                    //System.out.println("Done.");
                 }
             }
  

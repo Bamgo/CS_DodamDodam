@@ -17,7 +17,7 @@ public class SerialReader implements Runnable {
         try {
             while ((len = this.in.read(buffer)) > -1) {
             	a = new String(buffer, 0, len);
-                Thread.sleep(500);
+                Thread.sleep(2000);
             }
         } catch (IOException e) {
             e.printStackTrace();

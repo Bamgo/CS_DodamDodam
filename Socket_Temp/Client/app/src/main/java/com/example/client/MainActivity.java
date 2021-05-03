@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,10 +22,13 @@ import java.net.Socket;
 public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     Socket socket;
-    private String ip = "192.168.0.101"; // 서버의 IP 주소
+    private String ip = "172.30.1.50"; // 서버의 IP 주소
     private int port = 3000; // PORT번호를 꼭 맞추어 주어야한다.
     EditText et;
-    TextView msgTV;
+    TextView Temp;
+    TextView Water;
+    TextView label1;
+    TextView label2;
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,11 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler();
         et = (EditText) findViewById(R.id.EditText01);
         Button btn = (Button) findViewById(R.id.Button01);
-        msgTV = (TextView)findViewById(R.id.chatTV);
-        ConnectThread th =new ConnectThread();
+        Temp = (TextView)findViewById(R.id.Temp);
+        Water = (TextView)findViewById(R.id.Water);
+        label1 = (TextView)findViewById(R.id.label1);
+        label2 = (TextView)findViewById(R.id.label2);
+        ConnectThread th =new ConnectThread();  // 접속하면 바로 연결
         th.start();
     }
     @Override
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     class ConnectThread extends Thread{//소켓통신을 위한 스레드
         public void run(){
             try{
-                while(true) {
+                while(true) {  // 계속 반복
                     //소켓 생성
                     InetAddress serverAddr = InetAddress.getByName(ip);
                     socket = new Socket(serverAddr, port);
@@ -63,12 +68,16 @@ public class MainActivity extends AppCompatActivity {
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     //in에 저장된 데이터를 String 형태로 변환 후 읽어들어서 String에 저장
                     String read = in.readLine();
-                    System.out.println("받았음");
+                    int idx = read.indexOf("*");  // *를 기준으로 인덱스 찾음
+                    String Temperature = read.substring(0, idx);  // 0번째부터 *까지의 문자열 추출
+                    String Water = read.substring(idx+1);  // * 다음부터 끝까지 추출
+                    System.out.println("Data get");
                     //client에 다시 전송
                     PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                    out.println("받았음, 회신");
+                    out.println("No Error");
                     //화면 출력
-                    mHandler.post(new msgUpdate(read));
+                    mHandler.post(new msgTempUpdate(Temperature));
+                    mHandler.post(new msgWaterUpdate(Water));
                     Log.d("=============", read);
                 }
             }catch(Exception e){
@@ -79,13 +88,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
     // 받은 메시지 출력
-    class msgUpdate implements Runnable {
+    class msgTempUpdate implements Runnable {
         private String msg;
-        public msgUpdate(String str) {
+        public msgTempUpdate(String str) {
             this.msg = str;
         }
         public void run() {
-            msgTV.setText(msg);
+            Temp.setText(msg);
+        }  // 한 값만 표시되게
+    };
+
+    class msgWaterUpdate implements Runnable {
+        private String msg;
+        public msgWaterUpdate(String str) {
+            this.msg = str;
         }
+        public void run() {
+            Water.setText(msg);
+        }  // 한 값만 표시되게
     };
 }
