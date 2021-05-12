@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,25 +23,54 @@ import java.net.Socket;
 public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     Socket socket;
-    private String ip = "172.30.1.50"; // 서버의 IP 주소
+    private String ip = "100.100.106.154"; // 서버의 IP 주소
     private int port = 3000; // PORT번호를 꼭 맞추어 주어야한다.
-    EditText et;
     TextView Temp;
     TextView Water;
     TextView label1;
     TextView label2;
+    TextView textView;
+    TextView textView2;
+    Button LedON;
+    Button LedOFF;
+    TextView tv;
+    int LED = 0;
+
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mHandler = new Handler();
-        et = (EditText) findViewById(R.id.EditText01);
-        Button btn = (Button) findViewById(R.id.Button01);
         Temp = (TextView)findViewById(R.id.Temp);
         Water = (TextView)findViewById(R.id.Water);
         label1 = (TextView)findViewById(R.id.label1);
         label2 = (TextView)findViewById(R.id.label2);
+        textView = (TextView)findViewById(R.id.textView);
+        textView2 = (TextView)findViewById(R.id.textView2);
+        LedON = (Button)findViewById(R.id.LedON);
+        LedOFF = (Button)findViewById(R.id.LedOFF);
+        tv = (TextView)findViewById(R.id.tv);
+
+        View.OnClickListener ON = new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                LED = 1;
+                tv.setText("LED ON");
+            }
+        };
+
+        View.OnClickListener OFF = new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                LED = 0;
+                tv.setText("LED OFF");
+            }
+        };
+
+        LedON.setOnClickListener(ON);
+        LedOFF.setOnClickListener(OFF);
+
         ConnectThread th =new ConnectThread();  // 접속하면 바로 연결
         th.start();
     }
@@ -53,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     class ConnectThread extends Thread{//소켓통신을 위한 스레드
         public void run(){
             try{
@@ -60,11 +91,8 @@ public class MainActivity extends AppCompatActivity {
                     //소켓 생성
                     InetAddress serverAddr = InetAddress.getByName(ip);
                     socket = new Socket(serverAddr, port);
-                    //입력 메시지
-                    String sndMsg = et.getText().toString();
-                    Log.d("=============", sndMsg);
-                    //데이터 전송
-                    //소켓에서 넘오는 stream 형태의 문자를 얻은 후 읽어 들어서  bufferstream 형태로 in 에 저장.
+
+                    //소켓에서 넘어오는 stream 형태의 문자를 얻은 후 읽어 들여서  bufferstream 형태로 in 에 저장.
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     //in에 저장된 데이터를 String 형태로 변환 후 읽어들어서 String에 저장
                     String read = in.readLine();
@@ -74,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("Data get");
                     //client에 다시 전송
                     PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                    out.println("No Error");
+                    out.println(LED);
                     //화면 출력
                     mHandler.post(new msgTempUpdate(Temperature));
                     mHandler.post(new msgWaterUpdate(Water));
