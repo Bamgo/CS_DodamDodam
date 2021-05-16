@@ -15,7 +15,7 @@ public class SerialReader implements Runnable {
         byte[] buffer = new byte[1024];
         int len = -1;
         try {
-            while ((len = this.in.read(buffer)) > -1) {
+            while ((len = this.in.read(buffer)) > -1) {  // 아두이노의 센서 값 계속해서 읽어오기
             	a = new String(buffer, 0, len);
                 Thread.sleep(2000);
             }

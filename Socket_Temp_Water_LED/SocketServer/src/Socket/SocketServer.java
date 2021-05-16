@@ -17,7 +17,8 @@ import java.io.*;
 public class SocketServer implements Runnable {  // 메인 코드 (소켓 서버 열고 데이터 전송)
     public static final int ServerPort = 3000;
     Scanner sc = new Scanner(System.in);
-    
+    public static String read = "0";
+    public static int data = 0;
 
     @Override
     public void run() {
@@ -31,12 +32,17 @@ public class SocketServer implements Runnable {  // 메인 코드 (소켓 서버 열고 데
                 try {
                     //데이터 전송
                     PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())),true);
-                    String msg = a;
+                    String msg = a;  // SerialReader에서 읽어온 센서 값 저장
                     System.out.println(a);
-                    out.println(msg);
+                    out.println(msg);  // 센서 값 애플리케이션으로 내보내기
                     //데이터 수신
                     BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                    String read = input.readLine(); 
+                    read = input.readLine(); // 안드로이드 앱에서 버튼이 눌렸을때 나오는 값을 읽어오기
+                    if(read.equals("1")) {  // 시리얼 통신으로 아스키 코드 값을 보내야 하므로 1은 49, 0은 48로 변환
+                    	data = 49;
+                    }else {
+                    	data = 48;
+                    }
                     Thread.sleep(2000);
                     System.out.println(read);
                 } catch (Exception e) {//데이터 전송과정에서의 에러출력
@@ -58,7 +64,7 @@ public class SocketServer implements Runnable {  // 메인 코드 (소켓 서버 열고 데
     public static void main(String[] args) {
     	
     	try {
-			(new Serial()).connect("COM3");
+			(new Serial()).connect("COM3");  // 시리얼 포트
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

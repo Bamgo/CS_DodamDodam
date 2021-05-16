@@ -22,7 +22,7 @@ public class Serial {
             if (commPort instanceof SerialPort) {
                 SerialPort serialPort = (SerialPort) commPort;
                 serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
-                        SerialPort.PARITY_NONE);
+                        SerialPort.PARITY_NONE);  // 포트 설정. 115200대역만 주의.
 
                 InputStream in = serialPort.getInputStream();
                 OutputStream out = serialPort.getOutputStream();

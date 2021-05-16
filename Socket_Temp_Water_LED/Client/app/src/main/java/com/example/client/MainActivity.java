@@ -23,7 +23,7 @@ import java.net.Socket;
 public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     Socket socket;
-    private String ip = "100.100.106.154"; // 서버의 IP 주소
+    private String ip = "192.168.0.103"; // 서버의 IP 주소
     private int port = 3000; // PORT번호를 꼭 맞추어 주어야한다.
     TextView Temp;
     TextView Water;
