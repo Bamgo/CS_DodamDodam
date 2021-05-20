@@ -23,6 +23,7 @@ void LED_OnOff(int state)
 void serialEvent()
 {
   int c = Serial.read();
+  
   if (c == '1')
   {
     LED_OnOff(ON);
