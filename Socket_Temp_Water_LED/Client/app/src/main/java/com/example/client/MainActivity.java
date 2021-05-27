@@ -23,7 +23,7 @@ import java.net.Socket;
 public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     Socket socket;
-    private String ip = "192.168.0.103"; // 서버의 IP 주소
+    private String ip = "192.168.137.22"; // 서버의 IP 주소
     private int port = 3000; // PORT번호를 꼭 맞추어 주어야한다.
     TextView Temp;
     TextView Water;
@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     Button LedON;
     Button LedOFF;
     TextView tv;
+    TextView label3;
+    TextView Depth;
     int LED = 0;
 
     @SuppressLint("WrongViewCast")
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         LedON = (Button)findViewById(R.id.LedON);
         LedOFF = (Button)findViewById(R.id.LedOFF);
         tv = (TextView)findViewById(R.id.tv);
+        label3 = (TextView)findViewById(R.id.label3);
+        Depth = (TextView)findViewById(R.id.Depth);
 
         View.OnClickListener ON = new View.OnClickListener(){
             @Override
@@ -96,16 +100,24 @@ public class MainActivity extends AppCompatActivity {
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     //in에 저장된 데이터를 String 형태로 변환 후 읽어들어서 String에 저장
                     String read = in.readLine();
-                    int idx = read.indexOf("*");  // *를 기준으로 인덱스 찾음
+                    int idx = 0;
+                    int idxx = 0;
+                    idx = read.indexOf("*");  // *를 기준으로 인덱스 찾음
                     String Temperature = read.substring(0, idx);  // 0번째부터 *까지의 문자열 추출
-                    String Water = read.substring(idx+1);  // * 다음부터 끝까지 추출
-                    System.out.println("Data get");
+                    String tem = read.substring(idx+1);  // * 다음부터 끝까지 추출
+                    idxx = tem.indexOf("=");  // 또 찾기
+                    String Water = tem.substring(0, idxx);
+                    String Depth = tem.substring(idxx+1);
+                    System.out.println("Data get - "+Temperature+" "+Water+" "+Depth);
                     //client에 다시 전송
                     PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    out.println(LED);
+                    System.out.println(LED);
                     out.println(LED);
                     //화면 출력
                     mHandler.post(new msgTempUpdate(Temperature));
                     mHandler.post(new msgWaterUpdate(Water));
+                    mHandler.post(new msgDepthUpdate(Depth));
                     Log.d("=============", read);
                 }
             }catch(Exception e){
@@ -133,6 +145,16 @@ public class MainActivity extends AppCompatActivity {
         }
         public void run() {
             Water.setText(msg);
+        }  // 한 값만 표시되게
+    };
+
+    class msgDepthUpdate implements Runnable {
+        private String msg;
+        public msgDepthUpdate(String str) {
+            this.msg = str;
+        }
+        public void run() {
+            Depth.setText(msg);
         }  // 한 값만 표시되게
     };
 }

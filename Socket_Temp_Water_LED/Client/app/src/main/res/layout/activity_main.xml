@@ -15,15 +15,15 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.568"
+        app:layout_constraintHorizontal_bias="0.376"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.084" />
+        app:layout_constraintVertical_bias="0.083" />
 
     <TextView
         android:id="@+id/Temp"
-        android:layout_width="164dp"
-        android:layout_height="122dp"
+        android:layout_width="102dp"
+        android:layout_height="66dp"
         android:text="수온"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,13 +35,13 @@
 
     <TextView
         android:id="@+id/Water"
-        android:layout_width="168dp"
-        android:layout_height="116dp"
+        android:layout_width="116dp"
+        android:layout_height="65dp"
         android:text="수질"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.864"
+        app:layout_constraintHorizontal_bias="0.462"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.144" />
@@ -63,7 +63,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LED를 켜기"
+        android:text="히터를 켜기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
@@ -75,7 +75,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LED를 끄기"
+        android:text="히터를 끄기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.596"
@@ -119,5 +119,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.742" />
+
+    <TextView
+        android:id="@+id/label3"
+        android:layout_width="66dp"
+        android:layout_height="32dp"
+        android:text="수위 : "
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.791"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.084" />
+
+    <TextView
+        android:id="@+id/Depth"
+        android:layout_width="103dp"
+        android:layout_height="62dp"
+        android:text="수위"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.873"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.144" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
