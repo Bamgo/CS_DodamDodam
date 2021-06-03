@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         View.OnClickListener ON = new View.OnClickListener(){
             @Override
-            public void onClick(View v){
+            public void onClick(View v){  // 조명 켜는 버튼이 눌렸을 때
                 LED = 1;
                 tv.setText("LED ON");
             }
@@ -66,20 +66,20 @@ public class MainActivity extends AppCompatActivity {
 
         View.OnClickListener OFF = new View.OnClickListener(){
             @Override
-            public void onClick(View v){
+            public void onClick(View v){  // 조명 끄는 버튼이 눌렸을 때
                 LED = 0;
                 tv.setText("LED OFF");
             }
         };
 
-        LedON.setOnClickListener(ON);
+        LedON.setOnClickListener(ON);  // 온클릭리스너 추가
         LedOFF.setOnClickListener(OFF);
 
         ConnectThread th =new ConnectThread();  // 접속하면 바로 연결
         th.start();
     }
     @Override
-    protected void onStop() {
+    protected void onStop() {  // 소켓 서버 종료 관련
         super.onStop();
         try {
             socket.close();//종료시 소켓도 닫아주어야한다.
@@ -88,14 +88,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class ConnectThread extends Thread{//소켓통신을 위한 스레드
+    class ConnectThread extends Thread{  //소켓통신을 위한 스레드
         public void run(){
             try{
                 while(true) {  // 계속 반복
                     //소켓 생성
                     InetAddress serverAddr = InetAddress.getByName(ip);
                     socket = new Socket(serverAddr, port);
-
                     //소켓에서 넘어오는 stream 형태의 문자를 얻은 후 읽어 들여서  bufferstream 형태로 in 에 저장.
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     //in에 저장된 데이터를 String 형태로 변환 후 읽어들어서 String에 저장
@@ -109,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
                     String Water = tem.substring(0, idxx);
                     String Depth = tem.substring(idxx+1);
                     System.out.println("Data get - "+Temperature+" "+Water+" "+Depth);
-                    //client에 다시 전송
+                    //버튼이 눌리면 out 값을 내보내기 (기본 0)
                     PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                    out.println(LED);
+                    out.println(LED);  // out 값을 아두이노 스케치에 출력하기
                     System.out.println(LED);
                     out.println(LED);
                     //화면 출력
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     // 받은 메시지 출력
-    class msgTempUpdate implements Runnable {
+    class msgTempUpdate implements Runnable {  // 온도 값 출력
         private String msg;
         public msgTempUpdate(String str) {
             this.msg = str;
@@ -138,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         }  // 한 값만 표시되게
     };
 
-    class msgWaterUpdate implements Runnable {
+    class msgWaterUpdate implements Runnable {  // 탁도 값 출력(이미지 변환과 경고에만 사용)
         private String msg;
         public msgWaterUpdate(String str) {
             this.msg = str;
@@ -148,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         }  // 한 값만 표시되게
     };
 
-    class msgDepthUpdate implements Runnable {
+    class msgDepthUpdate implements Runnable {  // 수위 값 출력(경고에만 사용)
         private String msg;
         public msgDepthUpdate(String str) {
             this.msg = str;
